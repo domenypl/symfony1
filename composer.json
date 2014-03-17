@@ -1,0 +1,14 @@
+{
+    "name": "domenypl/symfony1-legacy",
+    "type": "library",
+    "description": "symfony1-legacy is the unofficial Git mirror for symfony 1.0.22 with Domeny.pl (http://domeny.pl) modifications.",
+    "keywords": ["symfony1"],
+    "homepage": "https://github.com/domenypl/symfony1-legacy.git",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=5.4.0"
+    }
+}
+
+
