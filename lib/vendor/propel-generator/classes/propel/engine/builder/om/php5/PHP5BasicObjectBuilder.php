@@ -627,10 +627,10 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 		}
 
 		$this->addMutatorOpen($script, $col);
-		
+
 		// Perform some smart checking here to handle possible type discrepancies
-		// between the passed-in value and the value from the DB 
-		
+		// between the passed-in value and the value from the DB
+
 		if ($col->getPhpNative() === "int") {
 			$script .= "
 		// Since the native PHP type for this column is integer,
@@ -644,11 +644,11 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 		// Since the native PHP type for this column is string,
 		// we will cast the input to a string (if it is not).
 		if (\$v !== null && !is_string(\$v)) {
-			\$v = (string) \$v; 
+			\$v = (string) \$v;
 		}
 ";
 		}
-		
+
 		$script .= "
 		if (\$this->$clo !== \$v";
 		if ($defaultValue !== null) {
@@ -986,12 +986,12 @@ $script .= "
 			\$con = Propel::getConnection(".$this->getPeerClassname()."::DATABASE_NAME);
 		}
 
+        \$con->begin();
 		try {
-			\$con->begin();
 			".$this->getPeerClassname()."::doDelete(\$this, \$con);
 			\$this->setDeleted(true);
 			\$con->commit();
-		} catch (PropelException \$e) {
+		} catch (Exception \$e) {
 			\$con->rollback();
 			throw \$e;
 		}

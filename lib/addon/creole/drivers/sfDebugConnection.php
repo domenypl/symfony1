@@ -158,22 +158,21 @@ class sfDebugConnection implements Connection
     $this->lastExecutedQuery = $sql;
     $this->numQueriesExecuted++;
 
+    $boolLog = ((sfConfig::get('sf_debug') && sfConfig::get('sf_logging_enabled')) || nyProfiler::getInstance()->isStarted() );
     $elapsedTime = 0;
-    if (sfConfig::get('sf_debug') && sfConfig::get('sf_logging_enabled'))
-    {
+    if ( $boolLog ) {
       $sqlTimer = sfTimerManager::getTimer('Database');
       $timer = new sfTimer();
-    }
+    } // endif
 
     $retval = $this->childConnection->executeQuery($sql, $fetchmode);
 
-    if (sfConfig::get('sf_debug') && sfConfig::get('sf_logging_enabled'))
-    {
+    if ( $boolLog ) {
       $sqlTimer->addTime();
       $elapsedTime = $timer->getElapsedTime();
-    }
+    } // endif
 
-    $this->log(sprintf("{sfCreole} executeQuery(): [%.2f ms] %s", $elapsedTime * 1000, $sql));
+    $this->log(sprintf("{sfCreole} executeQuery(): [%.2f ms] %s", $elapsedTime * 1000, $sql), true);
 
     return $retval;
   }
@@ -183,10 +182,26 @@ class sfDebugConnection implements Connection
   **/
   public function executeUpdate($sql)
   {
-    $this->log("{sfCreole} executeUpdate(): $sql");
     $this->lastExecutedQuery = $sql;
     $this->numQueriesExecuted++;
-    return $this->childConnection->executeUpdate($sql);
+
+    $boolLog = ((sfConfig::get('sf_debug') && sfConfig::get('sf_logging_enabled')) || nyProfiler::getInstance()->isStarted() );
+    $elapsedTime = 0;
+    if ( $boolLog ) {
+      $sqlTimer = sfTimerManager::getTimer('Database');
+      $timer = new sfTimer();
+    } // endif
+
+    $intResult = $this->childConnection->executeUpdate($sql);
+
+    if ( $boolLog ) {
+      $sqlTimer->addTime();
+      $elapsedTime = $timer->getElapsedTime();
+    } // endif
+
+    $this->log(sprintf("{sfCreole} executeUpdate(): [%.2f ms] %s", $elapsedTime * 1000, $sql), true );
+
+    return $intResult;
   }
 
   /**
@@ -278,7 +293,7 @@ class sfDebugConnection implements Connection
    * Private function that logs message using specified logger (if provided).
    * @param string $msg Message to log.
    */
-  private function log($msg)
+  protected function log($msg, $boolQueryLog = false )
   {
     if (self::$logger)
     {

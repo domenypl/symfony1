@@ -999,12 +999,12 @@ $script .= "
 			\$con = Propel::getConnection(".$this->getPeerClassname()."::DATABASE_NAME);
 		}
 
+        \$con->begin();
 		try {
-			\$con->begin();
 			\$affectedRows = \$this->doSave(\$con);
 			\$con->commit();
 			return \$affectedRows;
-		} catch (PropelException \$e) {
+		} catch (Exception \$e) {
 			\$con->rollback();
 			throw \$e;
 		}
@@ -1100,7 +1100,7 @@ $script .= "
 				$aVarName = $this->getFKVarName($fk);
 				$script .= "
 			if (\$this->".$aVarName." !== null) {
-				if (!\$this->".$aVarName."->validate(\$columns)) {
+				if (!\$this->".$aVarName."->validate()) {
 					\$failureMap = array_merge(\$failureMap, \$this->".$aVarName."->getValidationFailures());
 				}
 			}
@@ -1123,7 +1123,7 @@ $script .= "
 				$script .= "
 				if (\$this->$collName !== null) {
 					foreach(\$this->$collName as \$referrerFK) {
-						if (!\$referrerFK->validate(\$columns)) {
+						if (!\$referrerFK->validate()) {
 							\$failureMap = array_merge(\$failureMap, \$referrerFK->getValidationFailures());
 						}
 					}

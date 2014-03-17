@@ -404,14 +404,14 @@ if (Propel::isInit()) {
 	/** A key representing a particular subclass */
 	const CLASSKEY_".strtoupper($child->getKey())." = '" . $child->getKey() . "';
 ";
-					
+
 	if (strtoupper($child->getClassname()) != strtoupper($child->getKey())) {
 		$script .= "
 	/** A key representing a particular subclass */
 	const CLASSKEY_".strtoupper($child->getClassname())." = '" . $child->getKey() . "';
 ";
 	}
-	
+
 	$script .= "
 	/** A class that can be returned by this peer. */
 	const CLASSNAME_".strtoupper($child->getKey())." = '". $childBuilder->getClasspath() . "';
@@ -859,13 +859,13 @@ if (Propel::isInit()) {
 		// Set the correct dbName
 		\$criteria->setDbName(self::DATABASE_NAME);
 
+        \$con->begin();
 		try {
 			// use transaction because \$criteria could contain info
 			// for more than one table (I guess, conceivably)
-			\$con->begin();
 			\$pk = ".$this->basePeerClassname."::doInsert(\$criteria, \$con);
 			\$con->commit();
-		} catch(PropelException \$e) {
+		} catch(Exception \$e) {
 			\$con->rollback();
 			throw \$e;
 		}
@@ -945,10 +945,10 @@ if (Propel::isInit()) {
 			\$con = Propel::getConnection(self::DATABASE_NAME);
 		}
 		\$affectedRows = 0; // initialize var to track total num of affected rows
+        \$con->begin();
 		try {
 			// use transaction because \$criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
-			\$con->begin();
 			";
 			if ($this->isDeleteCascadeEmulationNeeded()) {
 				$script .="\$affectedRows += ".$this->getPeerClassname()."::doOnDeleteCascade(new Criteria(), \$con);
@@ -961,7 +961,7 @@ if (Propel::isInit()) {
 			$script .= "\$affectedRows += BasePeer::doDeleteAll(".$this->getPeerClassname()."::TABLE_NAME, \$con);
 			\$con->commit();
 			return \$affectedRows;
-		} catch (PropelException \$e) {
+		} catch (Exception \$e) {
 			\$con->rollback();
 			throw \$e;
 		}
@@ -1055,10 +1055,10 @@ if (Propel::isInit()) {
 
 		\$affectedRows = 0; // initialize var to track total num of affected rows
 
+        \$con->begin();
 		try {
 			// use transaction because \$criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
-			\$con->begin();
 			";
 
 		if ($this->isDeleteCascadeEmulationNeeded()) {
@@ -1072,7 +1072,7 @@ if (Propel::isInit()) {
 			\$affectedRows += {$this->basePeerClassname}::doDelete(\$criteria, \$con);
 			\$con->commit();
 			return \$affectedRows;
-		} catch (PropelException \$e) {
+		} catch (Exception \$e) {
 			\$con->rollback();
 			throw \$e;
 		}
@@ -1275,9 +1275,8 @@ if (Propel::isInit()) {
 			if (! is_array(\$cols)) {
 				\$cols = array(\$cols);
 			}
-
 			foreach(\$cols as \$colName) {
-				if (\$tableMap->containsColumn(\$colName)) {
+                if (\$tableMap->containsColumn(\$colName)) {
 					\$get = 'get' . \$tableMap->getColumn(\$colName)->getPhpName();
 					\$columns[\$colName] = \$obj->\$get();
 				}

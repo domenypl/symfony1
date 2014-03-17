@@ -426,6 +426,17 @@ class BasePeer
 	 */
 	public static function doSelect(Criteria $criteria, $con = null)
 	{
+	    $arrTables = array_keys( $criteria->getTablesColumns() );
+	    if ( sizeof( $arrTables ) > 1 ) {
+	        $arrJoins = array();
+    	    foreach ( $criteria->getJoins() as $objJoin ) { if (false) $objJoin = new Join();
+    	        $arrJoins[] = $objJoin->getLeftTableName();
+    	        $arrJoins[] = $objJoin->getRightTableName();
+    	    }
+    	    array_unique( $arrJoins );
+    	    $arrMissedJoinsWhatever = array_diff( $arrTables, $arrJoins );
+	    } // endif
+
 		$dbMap = Propel::getDatabaseMap($criteria->getDbName());
 
 		if ($con === null)
@@ -457,6 +468,12 @@ class BasePeer
 			Propel::log($e->getMessage(), Propel::LOG_ERR);
 			throw new PropelException($e);
 		}
+
+		if ( isset( $arrMissedJoinsWhatever ) && sizeof( $arrMissedJoinsWhatever )) {
+            $strBody   = "The probable error, a lack of joins tables ". var_export( $arrMissedJoinsWhatever, true ) ." in query: \n\n".$sql;
+//            $strBody  .= "\n\n".sfContext::getInstance()->getRequest()->getUri();
+            throw new Exception( $strBody );
+		} // endif
 
 		return $rs;
 	}

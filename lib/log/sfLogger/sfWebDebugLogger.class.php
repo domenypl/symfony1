@@ -75,10 +75,10 @@ class sfWebDebugLogger
 
     // get log type in {}
     $type = 'sfOther';
-    if (preg_match('/^\s*{([^}]+)}\s*(.+?)$/', $message, $matches))
+    if (preg_match('/^\s*{([^}]+)}\s*/', $message, $matches))
     {
       $type    = $matches[1];
-      $message = $matches[2];
+      $message = preg_replace( '/^(\s*{'.$type.'}\s*)/', '', $message );
     }
 
     // build the object containing the complete log information.

@@ -352,7 +352,7 @@ class PHP5ComplexPeerBuilder extends PHP5BasicPeerBuilder {
 
 				$script .= "
 		".$joinedTablePeerBuilder->getPeerClassname()."::addSelectColumns(\$c);
-		\$startcol$new_index = \$startcol$index + ".$joinedTablePeerBuilder->getPeerClassname()."::NUM_COLUMNS;
+		\$startcol$new_index = \$startcol$index + ".$joinedTablePeerBuilder->getPeerClassname()."::NUM_COLUMNS - ".$joinedTablePeerBuilder->getPeerClassname()."::NUM_LAZY_LOAD_COLUMNS;
 ";
 			$index = $new_index;
 
@@ -644,7 +644,7 @@ class PHP5ComplexPeerBuilder extends PHP5BasicPeerBuilder {
 						$new_index = $index + 1;
 						$script .= "
 		".$joinTablePeerBuilder->getPeerClassname()."::addSelectColumns(\$c);
-		\$startcol$new_index = \$startcol$index + ".$joinTablePeerBuilder->getPeerClassname()."::NUM_COLUMNS;
+		\$startcol$new_index = \$startcol$index + ".$joinTablePeerBuilder->getPeerClassname()."::NUM_COLUMNS - ".$joinTablePeerBuilder->getPeerClassname()."::NUM_LAZY_LOAD_COLUMNS;
 ";
 					$index = $new_index;
 					} // if joinClassName not excludeClassName

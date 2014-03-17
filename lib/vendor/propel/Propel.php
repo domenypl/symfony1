@@ -485,6 +485,7 @@ class Propel {
 
 			try {
 				$con = Creole::getConnection($dsn);
+
 			} catch (SQLException $e) {
 				throw new PropelException($e);
 			}
@@ -582,5 +583,15 @@ class Propel {
 			$conn->close();
 		}
 	}
+
+    /**
+     * zwraca connectiony który były zainicjowane
+     *
+     * @return arrat
+     */
+    public static function getConnectionsMap()
+    {
+        return self::$connectionMap;
+    } // getConnectionsMap
 
 }

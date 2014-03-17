@@ -1098,6 +1098,14 @@ class Criteria implements IteratorAggregate {
 
 		return $this;
 	}
+
+
+
+
+    public static function create()
+    {
+        return new Criteria();
+    } // creata
 }
 
 // --------------------------------------------------------------------
