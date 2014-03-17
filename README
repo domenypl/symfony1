@@ -1,3 +1,6 @@
+symfony1-legacy is the unofficial Git mirror for symfony 1.0.22 with Domeny.pl (http://domeny.pl) modifications.
+---------
+
 Symfony is a complete framework designed to optimize the development of web applications by way of several key features.
 For starters, it separates a web application's business rules, server logic, and presentation views.
 It contains numerous tools and classes aimed at shortening the development time of a complex web application.
@@ -8,6 +11,10 @@ Symfony was written entirely in PHP 5.
 It has been thoroughly tested in various real-world projects, and is actually in use for high-demand e-business websites.
 It is compatible with most of the available databases engines, including MySQL, PostgreSQL, Oracle, and Microsoft SQL Server.
 It runs on *nix and Windows platforms.
+
+PHP Version and other requirements
+-------
+PHP 5.4 - Officially tested version
 
 LICENSE
 -------
