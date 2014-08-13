@@ -15,6 +15,7 @@ It runs on *nix and Windows platforms.
 PHP Version and other requirements
 -------
 PHP 5.4 - Officially tested version
+PHP 5.5 - In test on branch master
 
 LICENSE
 -------

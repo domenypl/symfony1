@@ -3,7 +3,7 @@
 /*
  * This file is part of the symfony package.
  * (c) 2004-2006 Fabien Potencier <fabien.potencier@symfony-project.com>
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -12,7 +12,7 @@
  * sfWebResponse class.
  *
  * This class manages web reponses. It supports cookies and headers management.
- * 
+ *
  * @package    symfony
  * @subpackage response
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
@@ -328,6 +328,10 @@ class sfWebResponse extends sfResponse
    */
   protected function normalizeHeaderName($name)
   {
+    if (version_compare(PHP_VERSION, '5.5.0') >= 0) {
+      return preg_replace_callback('/\-(.)/', function ($matches) { return '-'. strtoupper($matches[1]); }, strtr(ucfirst(strtolower($name)), '_', '-'));
+    }
+
     return preg_replace('/\-(.)/e', "'-'.strtoupper('\\1')", strtr(ucfirst(strtolower($name)), '_', '-'));
   }
 
