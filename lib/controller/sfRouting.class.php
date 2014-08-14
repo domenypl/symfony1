@@ -458,7 +458,7 @@ class sfRouting
     $params = sfToolkit::arrayDeepMerge($defaults, $params);
 
     if (version_compare(PHP_VERSION, '5.5.0') >= 0) {
-      $real_url = preg_replace_callback('/\:([^\/]+)/', function ($matches) { return urlencode($matches[1]); }, $url);
+      $real_url = preg_replace_callback('/\:([^\/]+)/', function ($matches) use ($params) { return urlencode($params[$matches[1]]); }, $url);
     } else {
       $real_url = preg_replace('/\:([^\/]+)/e', 'urlencode($params["\\1"])', $url);
     }
