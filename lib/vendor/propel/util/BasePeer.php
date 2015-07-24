@@ -300,6 +300,9 @@ class BasePeer
 			Propel::log($sql, Propel::LOG_DEBUG);
 
 			$stmt = $con->prepareStatement($sql);
+                        if (isset($criteria->debug) && class_exists('EmailLogger')) {
+                            EmailLogger::reportData($stmt);
+                        }
 			self::populateStmtValues($stmt, self::buildParams($qualifiedCols, $criteria), $dbMap);
 			$stmt->executeUpdate();
 
@@ -376,6 +379,9 @@ class BasePeer
 					// Get affected records.
 					$sql = "SELECT COUNT(*) FROM " . $tableName . " WHERE " . $sqlSnippet;
 					$stmt = $con->prepareStatement($sql);
+                                        if (isset($updateValues->debug) && class_exists('EmailLogger')) {
+                                            EmailLogger::reportData($stmt);
+                                        }
 					self::populateStmtValues($stmt, $selectParams, $dbMap);
 					$rs = $stmt->executeQuery(ResultSet::FETCHMODE_NUM);
 					$rs->next();
@@ -396,6 +402,9 @@ class BasePeer
 				Propel::log($sql, Propel::LOG_DEBUG);
 
 				$stmt = $con->prepareStatement($sql);
+                                if (isset($updateValues->debug) && class_exists('EmailLogger')) {
+                                    EmailLogger::reportData($stmt);
+                                }
 
 				// Replace '?' with the actual values
 				self::populateStmtValues($stmt, array_merge(self::buildParams($updateTablesColumns[$tableName], $updateValues), $selectParams), $dbMap);
